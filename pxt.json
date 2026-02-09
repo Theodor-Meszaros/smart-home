@@ -1,0 +1,32 @@
+{
+    "name": "Smart Home",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "v3": "*",
+        "servo": "*",
+        "pxt-faces": "github:calliope-edu/pxt-faces#8aa2a4defa37dcda4f1aabed461114d7344816e6",
+        "grove": "github:calliope-edu/pxt-grove#v0.9.5",
+        "jacdac": "github:jacdac/pxt-jacdac#v1.9.40",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.7.6",
+        "jacdac-led": "github:jacdac/pxt-jacdac/led#v1.9.40",
+        "jacdac-distance": "github:jacdac/pxt-jacdac/distance#v1.9.40"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "main.py"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "8.1.11",
+        "targetId": "calliopemini"
+    },
+    "supportedTargets": [
+        "calliopemini"
+    ],
+    "preferredEditor": "blocksprj"
+}
