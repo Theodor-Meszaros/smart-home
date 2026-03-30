@@ -285,7 +285,7 @@ basic.forever(function () {
     if (input.pinIsPressed(TouchPin.P3) || radio.receivedPacket(RadioPacketProperty.SerialNumber) == 3) {
         Tuer()
     }
-    if (input.pinIsPressed(TouchPin.P2) || pins.digitalReadPin(DigitalPin.C14) == 24) {
+    if (input.pinIsPressed(TouchPin.P2) || radio.receivedPacket(RadioPacketProperty.SerialNumber) == 24) {
         Licht()
     }
     if (input.pinIsPressed(TouchPin.P1) || pins.digitalReadPin(DigitalPin.C14) == 48) {
