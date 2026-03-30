@@ -1,17 +1,11 @@
-input.onPinTouchEvent(TouchPin.P1, input.buttonEventDown(), function () {
-    Alarm_ON = !(Alarm_ON)
-    if (Alarm_ON) {
-        Alarm_ON = true
-        basic.showString("Alarm ON", 100)
-    } else {
-        Alarm_ON = false
-        basic.showString("Alarm OFF", 100)
-    }
-})
-input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
+function Temperatur2 () {
     set_temperature += -1
     basic.showNumber(set_temperature)
-})
+}
+function Temperatur () {
+    set_temperature += 1
+    basic.showNumber(set_temperature)
+}
 function alarm () {
     music.play(music.createSoundExpression(WaveShape.Sine, 5000, 0, 255, 0, 500, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.InBackground)
     modules.led4.setBrightness(100)
@@ -78,23 +72,17 @@ input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
         lights = 1
     }
 })
-input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
-    set_temperature += 1
-    basic.showNumber(set_temperature)
-})
-input.onPinTouchEvent(TouchPin.P2, input.buttonEventDown(), function () {
-    if (Light_ON) {
-        Light_ON = true
-        modules.led4.setAll(0xffffff)
-        basic.showString("Light ON", 100)
+function AlarmONOFF () {
+    Alarm_ON = !(Alarm_ON)
+    if (Alarm_ON) {
+        Alarm_ON = true
+        basic.showString("Alarm ON", 100)
     } else {
-        Light_ON = false
-        modules.led4.setAll(0x000000)
-        basic.showString("Light OFF", 100)
+        Alarm_ON = false
+        basic.showString("Alarm OFF", 100)
     }
-    Light_ON = !(Light_ON)
-})
-input.onPinTouchEvent(TouchPin.P3, input.buttonEventDown(), function () {
+}
+function Tuer () {
     modules.led4.setAll(0x000000)
     open_door = !(open_door)
     if (open_door) {
@@ -152,7 +140,7 @@ input.onPinTouchEvent(TouchPin.P3, input.buttonEventDown(), function () {
         basic.showLeds(`
             # . . . .
             # # # # .
-            # . . . .
+            # # . . .
             # . . . .
             # . . . .
             `)
@@ -199,9 +187,75 @@ input.onPinTouchEvent(TouchPin.P3, input.buttonEventDown(), function () {
         music._playDefaultBackground(music.builtInPlayableMelody(Melodies.JumpDown), music.PlaybackMode.UntilDone)
         pins.servoWritePin(AnalogPin.C8, 0)
     }
-})
-let open_door = false
+}
+function Licht () {
+    if (Light_ON) {
+        Light_ON = true
+        modules.led4.setAll(0xffffff)
+        basic.showString("Light ON", 100)
+    } else {
+        Light_ON = false
+        modules.led4.setAll(0x000000)
+        basic.showString("Light OFF", 100)
+    }
+    Light_ON = !(Light_ON)
+}
+function HausONOFF () {
+    modules.led4.setAll(0x00ff00)
+    basic.showLeds(`
+        # . . . .
+        # # # # .
+        # # . . .
+        # . . . .
+        # . . . .
+        `)
+    basic.pause(100)
+    basic.showLeds(`
+        # . . . .
+        # # . . .
+        # . # . .
+        # . . # .
+        # . . . .
+        `)
+    basic.pause(100)
+    basic.showLeds(`
+        # . . . .
+        # # . . .
+        # # . . .
+        # # . . .
+        # # . . .
+        `)
+    basic.pause(500)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    modules.led4.setBrightness(100)
+    modules.led4.setPixelColor(0, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(1, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(2, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(3, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(4, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(5, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(6, 0x000000)
+    basic.pause(100)
+    modules.led4.setPixelColor(7, 0x000000)
+    music._playDefaultBackground(music.builtInPlayableMelody(Melodies.JumpDown), music.PlaybackMode.UntilDone)
+    pins.servoWritePin(AnalogPin.C8, 0)
+    motors.dualMotorPower(Motor.M0, 0)
+    Alarm_ON = true
+}
 let Light_ON = false
+let open_door = false
 let Alarm_ON = false
 let lights = 0
 let set_temperature = 0
@@ -209,8 +263,11 @@ motors.dualMotorPower(Motor.M0, 0)
 set_temperature = input.temperature()
 modules.led4.setAll(0x000000)
 lights = 0
+makerbit.connectIrReceiver(DigitalPin.C14, IrProtocol.NEC)
+radio.setGroup(1)
 basic.forever(function () {
     serial.writeValue("x", input.temperature())
+    basic.showNumber(pins.analogReadPin(AnalogPin.P0))
     if (input.temperature() > set_temperature) {
         motors.dualMotorPower(Motor.M0, 10)
     } else {
@@ -218,5 +275,20 @@ basic.forever(function () {
     }
     if (modules.distance4.distance() < 0.1 && Alarm_ON) {
         alarm()
+    }
+    if (input.buttonIsPressed(Button.B) || radio.receivedPacket(RadioPacketProperty.SerialNumber) == 1) {
+        Temperatur()
+    }
+    if (input.buttonIsPressed(Button.A) || radio.receivedPacket(RadioPacketProperty.SerialNumber) == 2) {
+        Temperatur2()
+    }
+    if (input.pinIsPressed(TouchPin.P3) || radio.receivedPacket(RadioPacketProperty.SerialNumber) == 3) {
+        Tuer()
+    }
+    if (input.pinIsPressed(TouchPin.P2) || pins.digitalReadPin(DigitalPin.C14) == 24) {
+        Licht()
+    }
+    if (input.pinIsPressed(TouchPin.P1) || pins.digitalReadPin(DigitalPin.C14) == 48) {
+        AlarmONOFF()
     }
 })

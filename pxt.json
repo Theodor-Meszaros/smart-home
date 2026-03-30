@@ -11,7 +11,9 @@
         "jacdac": "github:jacdac/pxt-jacdac#v1.9.40",
         "neopixel": "github:microsoft/pxt-neopixel#v0.7.6",
         "jacdac-led": "github:jacdac/pxt-jacdac/led#v1.9.40",
-        "jacdac-distance": "github:jacdac/pxt-jacdac/distance#v1.9.40"
+        "jacdac-distance": "github:jacdac/pxt-jacdac/distance#v1.9.40",
+        "MakerBit-IR-Receiver": "github:1010Technologies/pxt-makerbit-ir-receiver#v1.5.14",
+        "funk": "*"
     },
     "files": [
         "main.blocks",
